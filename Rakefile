@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "geo-triangle"
   gem.homepage = "http://github.com/parrot-studio/geo-triangle"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{calculate geo-triangle's gravity center}
+  gem.description = %Q{calculate center of 3 geo-coordinates(lat, lon)}
   gem.email = "parrot@users.sourceforge.jp"
   gem.authors = ["parrot-studio"]
   # dependencies defined in Gemfile
@@ -28,6 +28,7 @@ Jeweler::RubygemsDotOrgTasks.new
 require 'rspec/core'
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.rspec_opts = ["-c", "-r ./spec/spec_helper.rb"]
   spec.pattern = FileList['spec/**/*_spec.rb']
 end
 
