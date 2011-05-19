@@ -1,16 +1,68 @@
 = geo-triangle
 
-Description goes here.
+== Introduction
 
-== Contributing to geo-triangle
+Author:: parrot_studio < parrot at users.sourceforge.jp >
+License:: The MIT License
+
+三点の座標から中心（重心）を求める。
+
+あくまで緯度経度を数値的に処理しているだけで、距離の補正等は考慮していない。
+そのため、あまりに離れすぎた三点を指定すると、値が妥当でない場合があり得る。
+
+== Install
+ gem install geo-triangle
+
+== Usage
+ # require 'rubygems' # if ruby 1.8.x 
+ require 'geo-triangle'
  
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
-* Fork the project
-* Start a feature/bugfix branch
-* Commit and push until you are happy with your contribution
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+ # 緯度(lat), 経度(lon)の組み合わせを3つ渡す
+ GeoTriangle.center(
+   [36.383304,139.073632], [36.391026,139.075107], [36.378536,139.046445]) #=> [36.384289, 139.065061]
+ 
+ # 順序が正しければ引数は適当でもいい
+ GeoTriangle.center(
+   36.383304,139.073632,36.391026,139.075107,36.378536,139.046445) 
+ 
+ # newしてから構築するやり方
+ gt1 = GeoTriangle.new
+ gt1.set_coordinate([36.383304,139.073632])
+ gt1.set_coordinate([36.391026,139.075107])
+ gt1.set_coordinate([36.378536,139.046445])
+ gt1.center #=> [36.384289, 139.065061]
+ 
+ # 4個以上は無視される
+ gt2 = GeoTriangle.new
+ gt2.set_coordinate([36.383304,139.073632])
+ gt2.set_coordinate([36.391026,139.075107])
+ gt2.set_coordinate([36.378536,139.046445])
+ gt2.set_coordinate([37.378536,136.046445]) # 4つ目以降は無視
+ gt2.center #=> [36.384289, 139.065061]
+ 
+ # 同じ座標はまとめられる
+ gt3 = GeoTriangle.new
+ gt3.set_coordinate([36.383304,139.073632])
+ gt3.set_coordinate([36.391026,139.075107])
+ gt3.set_coordinate([36.391026,139.075107]) # 上と同じ座標
+ # 座標が2つと見なされ、座標の数が足りないのでnilを返す
+ gt3.center #=> nil
+
+== Extra Module
+ # require 'rubygems' # if 1.8.x 
+ require 'geo-triangle'
+ 
+ # 重心ではなく外心を求めたい場合
+ cc = GeoTriangleExt::CircumCenter.create([0,4],[2,0],[5,6])
+ cc.center #=> [2.333333, 3.333333]
+ 
+ # 鈍角三角形の場合、外心は三角形の外になるため、実装はしたが使えない
+
+== Release Note
+
+=== ver 0.0.1
+
+* release for test
 
 == Copyright
 
